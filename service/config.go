@@ -61,11 +61,6 @@ type logout struct {
 }
 
 func (c *NitroClient) SetLogLevel(level string) {
-	c.SetLogLevelWithContext(context.Background(), level)
-}
-
-func (c *NitroClient) SetLogLevelWithContext(ctx context.Context, level string) {
-	_ = ctx
 	c.logger.SetLevel(hclog.LevelFromString(level))
 }
 
@@ -154,12 +149,6 @@ func constructUrlPathString(findParams *FindParams) string {
 
 // IsLoggedIn tells if user is already logged in
 func (c *NitroClient) IsLoggedIn() bool {
-	return c.IsLoggedInWithContext(context.Background())
-}
-
-// IsLoggedInWithContext tells if user is already logged in
-func (c *NitroClient) IsLoggedInWithContext(ctx context.Context) bool {
-	_ = ctx
 	if len(c.getSessionid()) > 0 {
 		return true
 	}
@@ -174,7 +163,7 @@ func (c *NitroClient) Login() error {
 // LoginWithContext logs in to netscaler and stores the session
 func (c *NitroClient) LoginWithContext(ctx context.Context) error {
 	// Check if login is already done
-	if c.IsLoggedInWithContext(ctx) {
+	if c.IsLoggedIn() {
 		return nil
 	}
 
