@@ -500,6 +500,10 @@ func (c *NitroClient) listResourceWithArgsWithContext(ctx context.Context, resou
 
 	data, err := c.doHTTPRequestWithContext(ctx, "GET", url2, bytes.NewBuffer([]byte{}), readResponseHandler)
 	if err != nil {
+		// DO NOT fallback for systemfile
+		if resourceType == "systemfile" {
+			return data, err
+		}
 		c.logger.Trace("listResourceWithArgs: error listing with args, trying filter", "error", err)
 		url2 = url + "?filter=" + strArgs
 		c.logger.Trace("listResourceWithArgs", "url2", url2)
